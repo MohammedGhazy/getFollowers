@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchVc: UIViewController {
+class SearchVC: UIViewController {
     
     let imageLogo    = UIImageView()
     let txtField     = MyTextField()
@@ -30,7 +30,7 @@ class SearchVc: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        navigationController?.isNavigationBarHidden = true
+        navigationController?.setNavigationBarHidden(true,animated:true)
     }
     
     // ---------------------------- put app logo ------------------------//
@@ -88,7 +88,7 @@ class SearchVc: UIViewController {
             
         }
         
-        let followersVc = FollowersListVc()
+        let followersVc = FollowersListVC()
         
         followersVc.username = txtField.text
         followersVc.title = txtField.text
@@ -98,7 +98,7 @@ class SearchVc: UIViewController {
 }
 //----------------------- textField Delegate ----------------------------//
 
-extension SearchVc : UITextFieldDelegate{
+extension SearchVC : UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // here my logic //
        pushThisToFollowersVc()

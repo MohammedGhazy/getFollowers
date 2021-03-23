@@ -26,14 +26,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func createSearchNavController() -> UINavigationController {
-        let searchVc = SearchVc()
+        let searchVc = SearchVC()
         searchVc.title = "Search"
         searchVc.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
         return UINavigationController(rootViewController: searchVc)
     }
     
     func createFollowesListNavController() -> UINavigationController {
-        let followersListVc = FavouriteListVc()
+        let followersListVc = FavouriteListVC()
         followersListVc.title = "Followers"
         followersListVc.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
         return UINavigationController(rootViewController: followersListVc)
