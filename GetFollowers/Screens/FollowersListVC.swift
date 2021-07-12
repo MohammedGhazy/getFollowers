@@ -44,9 +44,11 @@ class FollowersListVC: UIViewController {
     
     func configureViewController(){
         navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .systemBackground
+        view.backgroundColor    = .systemBackground
+        
+        let addButton           = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
+        navigationItem.rightBarButtonItem = addButton
     }
-    
     
     
     func configureCollectionView(){
@@ -60,7 +62,7 @@ class FollowersListVC: UIViewController {
     func configureSearchController(){
         let searchController                     = UISearchController()
         searchController.searchResultsUpdater    = self
-        searchController.searchBar.delegate                = self
+        searchController.searchBar.delegate      = self
         searchController.searchBar.placeholder   = "Search For A Username."
         navigationItem.searchController          = searchController
     }
@@ -106,6 +108,33 @@ class FollowersListVC: UIViewController {
             self.dataSource.apply(snapshot, animatingDifferences: true)
         }
         
+    }
+    
+    @objc func addButtonTapped(){
+        showProgressIndicator()
+        
+        NetWorkManager.shared.getUserInfo(for: username) { [weak self]result in
+            guard let self = self else { return }
+            self.dismissIndicator()
+            
+            switch result {
+            case .success(let user):
+                let favorite = Followers(login: user.login, avatarUrl: user.avatarUrl)
+                
+                PersistantsManager.updateWith(favorite: favorite, actionType: .add, completed: { [weak self] error in
+                    guard let self = self else { return }
+                    guard let error  = error else {
+                        self.presentGFAlertOnMainThread(title: "Success", message: "You have successfully favorited this user 🎉.", buttonTitle: "Hooray!")
+                        return
+                    }
+                    self.presentGFAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "Ok")
+                }
+            )
+                
+            case .failure(let error):
+                self.presentGFAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "Ok")
+            }
+        }
     }
 }
 
